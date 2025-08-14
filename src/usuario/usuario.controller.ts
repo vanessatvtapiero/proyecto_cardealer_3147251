@@ -7,7 +7,7 @@ export class usuarioController {
   //endpint:
   //destino de la request 
   //se escribe como una funcion 
-  //en una clase controlador 
+
   @Get()
   consultarUsuarios(): string {
     return "Aqui se podrán consultar los usuarios";
