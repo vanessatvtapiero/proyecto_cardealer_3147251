@@ -9,25 +9,39 @@ export class AlertaService {
     private prisma: PrismaService
   ) {}
 
-  create(createAlertaDto: CreateAlertaDto) {
-    return 'This action adds a new alerta';
+  create(Body:any) {
+    return this.prisma.alertas.create({
+      data: Body
+    })
   }
 
   findAll() {
-    return this.prisma.alertas.findMany();
-  }
-
-  findOne(id: number) {
-    return this.prisma.alertas.findUnique({
-      where: { id }
+    return this.prisma.alertas.findMany({
+     
     });
   }
 
-  update(id: number, updateAlertaDto: UpdateAlertaDto) {
-    return `This action updates a #${id} alerta`;
+  findOne(id: number) {
+    return this.prisma.alertas.findFirst({
+      where: { id_alerta : id }
+    });
   }
 
-  remove(id: number) {
-    return `This action removes a #${id} alerta`;
+  async update(id: number, Body : any) {
+    return await this.prisma.alertas.update({
+      where: { id_alerta : id },
+      data: Body
+    });
+  }
+
+  async remove(id: number) {
+    await this.prisma.alertas.delete({
+      where: { id_alerta : id }
+    })
+    return{
+      "exito" : true,
+      "mensaje" : "Eliminando correctamente",
+      "id_alerta" : id
+    }
   }
 }

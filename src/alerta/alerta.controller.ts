@@ -8,8 +8,8 @@ export class AlertaController {
   constructor(private readonly alertaService: AlertaService) {}
 
   @Post()
-  create(@Body() createAlertaDto: CreateAlertaDto) {
-    return this.alertaService.create(createAlertaDto);
+  create(@Body() Body:any) {
+    return this.alertaService.create(Body);
   }
 
   @Get()
@@ -23,8 +23,13 @@ export class AlertaController {
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAlertaDto: UpdateAlertaDto) {
-    return this.alertaService.update(+id, updateAlertaDto);
+  update(@Param('id') id: string, @Body() Body:any) {
+    return {
+      "exito" : true,
+      "mensaje" : "Actualizando correctamente",
+      "id_alerta" : id,
+      "data" : this.alertaService.update(+id, Body)
+    };
   }
 
   @Delete(':id')

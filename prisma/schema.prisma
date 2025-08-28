@@ -14,20 +14,21 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 model alertas {
-  id  Int @id @default(autoincrement())
-  model String
+  id_alerta  Int @id @default(autoincrement())
+  tipo_alerta  String
   plate String
-  release_date DateTime @default(now())
-  is_available Boolean @default(true) 
-  comentarios comentarios[]
+  fecha_alerta DateTime @default(now())
+  lugares lugares[]
 }
-model comentarios {
-  id  Int @id @default(autoincrement())
-  descripcion String
-  plate String
-  release_date DateTime @default(now())
-  is_available Boolean @default(true) 
+model lugares {
+  id_lugar  Int @id @default(autoincrement())
+  Nombre_lugar String
+  Tipo_lugar String
+  direccion String
+  hora_apertura String
+  hora_cierre String
+  precio Float
   alerta_id Int
-  alerta alertas @relation(fields: [alerta_id], references: [id])
+  alerta alertas @relation(fields: [alerta_id], references: [id_alerta])
 }
 
