@@ -2,14 +2,15 @@ import { Controller, Get, Post, Body, Patch, Param, Delete } from '@nestjs/commo
 import { AlertaService } from './alerta.service';
 import { CreateAlertaDto } from './dto/create-alerta.dto';
 import { UpdateAlertaDto } from './dto/update-alerta.dto';
+import { Alerta } from './entities/alerta.entity';
 
 @Controller('alerta')
 export class AlertaController {
   constructor(private readonly alertaService: AlertaService) {}
 
   @Post()
-  create(@Body() Body:any) {
-    return this.alertaService.create(Body);
+  create(@Body() alertaDto:CreateAlertaDto) {
+    return this.alertaService.create(alertaDto);
   }
 
   @Get()

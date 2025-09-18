@@ -10,8 +10,8 @@ generator client {
 }
 
 datasource db {
-  provider = "mysql"
-  url      = env("DATABASE_URL")
+  provider = "sqlite"
+  url      = "file:./Bogotaturis.db"
 }
 model alertas {
   id_alerta  Int @id @default(autoincrement())
@@ -32,3 +32,18 @@ model lugares {
   alerta alertas @relation(fields: [alerta_id], references: [id_alerta])
 }
 
+//modelos de autenticacion
+model estado{
+  id Int @id @default(autoincrement())
+  estado String
+  usuarios usuarios[]
+}
+model usuarios{
+  id Int @id @default(autoincrement())
+  username String @unique
+  email String @unique
+  password String
+  estado_id Int
+  estado estado @relation(fields: [estado_id] , references: [id])
+
+}

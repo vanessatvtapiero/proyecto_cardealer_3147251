@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateAlertaDto } from './dto/create-alerta.dto';
 import { UpdateAlertaDto } from './dto/update-alerta.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -9,10 +9,27 @@ export class AlertaService {
     private prisma: PrismaService
   ) {}
 
-  create(Body:any) {
-    return this.prisma.alertas.create({
-      data: Body
+  async create(alertaDto:CreateAlertaDto) {
+    let existe = await this.prisma.alertas.findFirst({
+      where:{tipo_alerta: alertaDto.tipo_alerta}
     })
+    if(existe){
+      throw new HttpException({
+        "exito": false,
+        "mensaje":"la alerta ya existe"
+      }, 404)
+    }
+    else{
+        return await this.prisma.alertas.create({
+      data: {
+        tipo_alerta:alertaDto.tipo_alerta,
+        plate:alertaDto.plate,
+        fecha_alerta:new Date(alertaDto.fecha_alerta)
+      
+      }
+    })
+    }
+
   }
 
   findAll() {
