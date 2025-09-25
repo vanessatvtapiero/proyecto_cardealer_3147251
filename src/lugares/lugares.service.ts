@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { HttpException, Injectable } from '@nestjs/common';
 import { CreateLugareDto } from './dto/create-lugare.dto';
 import { UpdateLugareDto } from './dto/update-lugare.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
@@ -6,6 +6,41 @@ import { PrismaService } from 'src/prisma/prisma.service';
 export class LugaresService {
     constructor(private prisma: PrismaService){}
   async create(LugareDto: CreateLugareDto) {
+
+    //validacion logica / negocio
+    //aquella que se realiza con una o varios.
+    //consulta a la base de datos
+    //determinar la existencia de un registro
+
+
+    //1. verificar que la alerta exista
+    let existeLugar= await this.prisma.lugares.findFirst({
+      where:{id_lugar : LugareDto.alerta_id}
+    })
+    if (!existeLugar){
+      throw new HttpException({
+        status : 404,
+        error: 'La alerta no existe'
+      },404);
+    }
+
+    //2. verificar que no exista un lugar con el mismo nombre en la misma alerta
+    let existeNombreLugar= await this.prisma.lugares.findFirst({
+      where:{
+        Nombre_lugar : LugareDto.Nombre_lugar,
+      }
+    })
+    if (existeNombreLugar){
+      throw new HttpException({
+        status : 400,
+        error: 'El nombre del lugar ya existe'
+      },400);
+    }
+
+    //3. verificar que la hora de apertura sea menor a la hora de cierre
+    //4. verificar que el precio sea un numero positivo
+    //se cumple, creqar el auto(insert)
+
    return await this.prisma.lugares.create({
     data:{
       alerta: { connect:{id_alerta: LugareDto.alerta_id}},
